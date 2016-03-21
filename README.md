@@ -5,11 +5,11 @@ Dear all,
 This is a bundled version of different Python routines, which may prove to be useful for the detrending and studying data taken by the BRITE nano-satellites.
 
 # Requirements
-'Standard' Python packages are expected to be installed. These are:
-- numpy
-- scipy
-- pylab / matplotlib
-- lmfit (if you want to do a boundend least-squares minimisation; routines marked with lmfit in the name)
+'Standard' Python packages are expected to be installed.  I include the installed version I have on my local computer.  Let me know if a previous version will not work / run.
+- numpy (1.9.2)
+- scipy (0.16.1)
+- pylab / matplotlib (1.5.1)
+- lmfit (if you want to do a boundend least-squares minimisation; routines marked with lmfit in the name) (0.8.0)
 
 In addition, all the plotting routines - currently - have a line stating  "import CheckMatplotlib" in the preambule.  Off course, you should remove this line.
 
