@@ -115,24 +115,11 @@ if __name__ == '__main__':
     
     
     figCORRECTION2 = pl.figure(figsize=(16,16))
-    axRAW = figCORRECTION2.add_subplot(221)
-    axFINAL = figCORRECTION2.add_subplot(223, sharex=axRAW, sharey=axRAW)
-    axRAWfreq = figCORRECTION2.add_subplot(222)
-    axFINALfreq = figCORRECTION2.add_subplot(224, sharex=axRAWfreq, sharey=axRAWfreq)
+    axRAW = figCORRECTION2.add_subplot(211)
+    axFINAL = figCORRECTION2.add_subplot(212, sharex=axRAW, sharey=axRAW)
     
     axRAW.plot(HJD, fluxRAW, 'k.', ms=6, alpha=.4)
-    axFINAL.plot(HJD, fluxCORRECTED, 'k.', ms=6, alpha=.4)
-    
-    # OWN routines, which are private
-    import ivs.timeseries.pergrams as pg
-    print 'I am starting the frequency calculations'
-    freqORIG, amplORIG = pg.scargle(HJD, fluxRAW - np.mean(fluxRAW), df=0.001, fn=25)
-    print '1/2'
-    freqCORR, amplCORR = pg.scargle(HJD, fluxCORRECTED - np.mean(fluxCORRECTED), df=0.001, fn=25)
-    
-    axRAWfreq.plot(freqORIG, amplORIG, 'k-', lw=3, alpha=.4)
-    axFINALfreq.plot(freqCORR, amplCORR, 'k-', lw=3, alpha=.4)
-    
+    axFINAL.plot(HJD, fluxCORRECTED, 'k.', ms=6, alpha=.4) 
     pl.show()
     
     
