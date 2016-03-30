@@ -203,6 +203,7 @@ if __name__ == '__main__':
     fileIN = 'HD37742_6_OrionII-2014_BHr_setup7_APa2s5_R2.dat'
     fileCLIP = 'HD37742_OrionII_BHr_setup7_clipEXAMPLE.dat'
     
+    # Change the following path to the exampleBRITEroutines directory
     pathEXAMPLE = '/home/bram/python/BRITE/exampleBRITEroutines'
     
     # Read in the setup file
