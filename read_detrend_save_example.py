@@ -73,6 +73,7 @@ if __name__ == '__main__':
     filePSFcorr_flux = 'HD37742_BHr_OrionII_decorr4PSF_FLUX.dat'
     fileCORR = 'HD37742_BHr_OrionII_corrected.dat'
     
+    # Change the following path to the exampleBRITEroutines directory
     pathEXAMPLE = '/home/bram/python/BRITE/exampleBRITEroutines'
     
     # Read in the clipped file
