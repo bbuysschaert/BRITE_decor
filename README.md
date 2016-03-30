@@ -10,7 +10,7 @@ This is a bundled version of different Python routines, which may prove to be us
 - scipy (0.16.1)
 - pylab / matplotlib (1.5.1)
 - lmfit (if you want to do a boundend least-squares minimisation; routines marked with lmfit in the name) (0.8.0)
-- statsmodels (0.6.1), comes installed with Canopy / Anacoda. See http://statsmodels.sourceforge.net/install.html to install otherwise.
+- statsmodels (0.6.1), comes installed with Canopy / Anacoda. See http://statsmodels.sourceforge.net/install.html and http://statsmodels.sourceforge.net/devel/install.html to install otherwise, however, try to avoid the easy_install.
 
 In addition, all the plotting routines - currently - have a line stating  "import CheckMatplotlib" in the preambule.  Off course, you should remove this line.
 
