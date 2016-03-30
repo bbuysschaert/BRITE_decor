@@ -23,7 +23,7 @@ Last update 21 March 2016
 #===============================================================================
 # 				Packages
 #===============================================================================
-import CheckMatplotlib # LOCAL ROUTINE, remove
+#import CheckMatplotlib # LOCAL ROUTINE, remove
 import numpy as np
 
 import scipy.interpolate as scInterp
