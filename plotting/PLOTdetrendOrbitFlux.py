@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Routines to visualise the detrending for the position - flux instrumental effects.
+Routines to visualise the detrending for the satellite orbital phase - flux instrumental effects.
     
-Last update 21 March 2016
+Last update 30 March 2016
 
 @author: Bram Buysschaert
 """
@@ -52,16 +52,16 @@ class bcolors:
 #===============================================================================
 # 				Code
 #===============================================================================
-def PLOTdetrendPOSITIONfluxDIAGinformCRIT(flux, position, AICtck, BICtck, **kwargs):
+def PLOTdetrendORBITfluxDIAGinformCRIT(flux, orbitalPHASE, AICtck, BICtck, **kwargs):
     """
-    Routine going with detrendPOSITIONflux to visualize diagnostics in case the AIC and BIC do not favor the same fit.
+    Routine going with detrendORBITflux to visualize diagnostics in case the AIC and BIC do not favor the same fit.
     
     Returns: Figure with -hopefully- enough diagnostics to determine the strength / weaknessess of the detrending
     
     @param flux: flux measurements [adu]
     @type flux: numpy array of length N
-    @param position: CCD position measurements along a position axis [pixel]
-    @type position: numpy array of length N
+    @param orbitalPHASE: orbital phase measurements []; ranges from 0 to 1
+    @type orbitalPHASE: numpy array of length N
     @param AICtck: spline tck for the favored fit by the AIC
     @type AICtck: tuple
     @param BICtck: spline tck for the favored fit by the BIC
@@ -69,8 +69,8 @@ def PLOTdetrendPOSITIONfluxDIAGinformCRIT(flux, position, AICtck, BICtck, **kwar
     """
     
     # Calculating the corrections
-    fluxCORRECTIONaic = scInterp.splev(position, AICtck)
-    fluxCORRECTIONbic = scInterp.splev(position, BICtck)
+    fluxCORRECTIONaic = scInterp.splev(orbitalPHASE, AICtck)
+    fluxCORRECTIONbic = scInterp.splev(orbitalPHASE, BICtck)
     
     # Setting up the figure window
     # ----------------------------
@@ -80,58 +80,58 @@ def PLOTdetrendPOSITIONfluxDIAGinformCRIT(flux, position, AICtck, BICtck, **kwar
     axAICres = figDIAGN.add_subplot(223, sharey=axAIC, sharex=axAIC)
     axBICres = figDIAGN.add_subplot(224, sharey=axAIC, sharex=axAIC)
     # -- 
-    axAIC.plot(position, flux, 'k.', ms=6, alpha=.4)
-    axAIC.plot(position, fluxCORRECTIONaic, 'r.', ms=8, alpha=.6)
+    axAIC.plot(orbitalPHASE, flux, 'k.', ms=6, alpha=.4)
+    axAIC.plot(orbitalPHASE, fluxCORRECTIONaic, 'r.', ms=8, alpha=.6)
     pl.tick_params('both',length=10,width=2,which='major'); pl.tick_params('both',length=10,width=1,which='minor')
     pyplot.locator_params(axis = 'x', nbins = 5); pyplot.locator_params(axis = 'y', nbins = 5); axAIC.set_title('best AIC fit'); axAIC.set_ylabel('Flux [adu]')
     # -- 
-    axAICres.plot(position, flux - fluxCORRECTIONaic, 'k.', ms=6, alpha=.4)
+    axAICres.plot(orbitalPHASE, flux - fluxCORRECTIONaic, 'k.', ms=6, alpha=.4)
     pl.tick_params('both',length=10,width=2,which='major'); pl.tick_params('both',length=10,width=1,which='minor')
     pyplot.locator_params(axis = 'x', nbins = 5); pyplot.locator_params(axis = 'y', nbins = 5); axAICres.set_ylabel('Res. Flux [adu]')
     # -- 
-    axBIC.plot(position, flux, 'k.', ms=6, alpha=.4)
-    axBIC.plot(position, fluxCORRECTIONbic, 'r.', ms=8, alpha=.6)
+    axBIC.plot(orbitalPHASE, flux, 'k.', ms=6, alpha=.4)
+    axBIC.plot(orbitalPHASE, fluxCORRECTIONbic, 'r.', ms=8, alpha=.6)
     pl.tick_params('both',length=10,width=2,which='major'); pl.tick_params('both',length=10,width=1,which='minor')
     pyplot.locator_params(axis = 'x', nbins = 5); pyplot.locator_params(axis = 'y', nbins = 5); axBIC.set_title('best BIC fit')
     # -- 
-    axBICres.plot(position, flux - fluxCORRECTIONbic, 'k.', ms=6, alpha=.4)
+    axBICres.plot(orbitalPHASE, flux - fluxCORRECTIONbic, 'k.', ms=6, alpha=.4)
     pl.tick_params('both',length=10,width=2,which='major'); pl.tick_params('both',length=10,width=1,which='minor')
     pyplot.locator_params(axis = 'x', nbins = 5); pyplot.locator_params(axis = 'y', nbins = 5)
     
     # Settings
     # --------
-    axAIC.set_xlim([np.min(position)-0.1, np.max(position)+0.1])
-    axAICres.set_xlabel('CCD position [pixel]'); axBICres.set_xlabel('CCD position [pixel]')  
+    axAIC.set_xlim([np.min(orbitalPHASE)-0.1, np.max(orbitalPHASE)+0.1])
+    axAICres.set_xlabel('Orbital phase'); axBICres.set_xlabel('Orbital phase')  
       
     return
 
-def PLOTdetrendPOSITIONfluxFULL(time, flux, position, TCK, **kwargs):
+def PLOTdetrendORBITfluxFULL(time, flux, orbitalPHASE, TCK, **kwargs):
     """
-    Routine going with detrendPOSITIONflux to visualize the detrending of the photometry for the instrumental correction between position and flux of BRITE photometry. 
+    Routine going with detrendORBITflux to visualize the detrending of the photometry for the instrumental correction between the satellite's orbital phase and BRITE flux.
     
     Returns: Figure with -hopefully- enough diagnostics to determine the strength / weaknessess of the detrending
     
     @param flux: flux measurements [adu]
     @type flux: numpy array of length N
-    @param position: CCD position measurements along a position axis [pixel]
-    @type position: numpy array of length N
+    @param orbitalPHASE: orbital phase measurements []; ranges from 0 to 1
+    @type orbitalPHASE: numpy array of length N
     @param TCK: spline tck for the favored fit
     @type TCK: tuple
     """
     
     # Calculating the corrections
     # ---------------------------
-    fluxCORRECTION = scInterp.splev(position, TCK)
+    fluxCORRECTION = scInterp.splev(orbitalPHASE, TCK)
 
     
     # Setting up the figure window
     # ----------------------------
-    figPOScorr = pl.figure(figsize=(16,16))
-    gsPOScorr = gridspec.GridSpec(2, 2,height_ratios=[1,1], width_ratios=[3,2])
-    axTIMEorig = figPOScorr.add_subplot(gsPOScorr[0,0])						# Initial flux with time
-    axTIMEcorr = figPOScorr.add_subplot(gsPOScorr[1,0], sharex=axTIMEorig, sharey=axTIMEorig)						# Corrected flux with time
-    axPOSorig = figPOScorr.add_subplot(gsPOScorr[0,1], sharey=axTIMEorig)						# Initial flux with position
-    axPOScorr = figPOScorr.add_subplot(gsPOScorr[1,1], sharex=axPOSorig, sharey=axTIMEorig)						# Corrected flux with position
+    figORBITcorr = pl.figure(figsize=(16,16))
+    gsORBITcorr = gridspec.GridSpec(2, 2,height_ratios=[1,1], width_ratios=[3,2])
+    axTIMEorig = figORBITcorr.add_subplot(gsORBITcorr[0,0])						# Initial flux with time
+    axTIMEcorr = figORBITcorr.add_subplot(gsORBITcorr[1,0], sharex=axTIMEorig, sharey=axTIMEorig)	# Corrected flux with time
+    axORBITorig = figORBITcorr.add_subplot(gsORBITcorr[0,1], sharey=axTIMEorig)				# Initial flux with orbitalPHASE
+    axORBITcorr = figORBITcorr.add_subplot(gsORBITcorr[1,1], sharex=axORBITorig, sharey=axTIMEorig)	# Corrected flux with orbitalPHASE
     
     # Panels related to time
     # ----------------------
@@ -144,21 +144,21 @@ def PLOTdetrendPOSITIONfluxFULL(time, flux, position, TCK, **kwargs):
     pl.tick_params('both',length=10,width=2,which='major'); pl.tick_params('both',length=10,width=1,which='minor')
     pyplot.locator_params(axis = 'x', nbins = 5); pyplot.locator_params(axis = 'y', nbins = 5) 
     axTIMEcorr.set_title('After correction'); axTIMEcorr.set_ylabel('Flux [adu]'); axTIMEcorr.set_ylabel('Time [d]')
-    # Panels related to position
+    # Panels related to orbitalPHASE
     # --------------------------------------
-    axPOSorig.plot(position, flux, 'k.', ms=6, alpha=.4)
-    axPOSorig.plot(position, fluxCORRECTION, 'r.', ms=6, alpha=.8)
+    axORBITorig.plot(orbitalPHASE, flux, 'k.', ms=6, alpha=.4); axORBITorig.plot(orbitalPHASE + 1., flux, 'k.', ms=6, alpha=.4)
+    axORBITorig.plot(orbitalPHASE, fluxCORRECTION, 'r.', ms=6, alpha=.8); axORBITorig.plot(orbitalPHASE + 1., fluxCORRECTION, 'r.', ms=6, alpha=.8)
     pl.tick_params('both',length=10,width=2,which='major'); pl.tick_params('both',length=10,width=1,which='minor')
-    pyplot.locator_params(axis = 'x', nbins = 5); pyplot.locator_params(axis = 'y', nbins = 5); axPOSorig.set_title('Correction') 
+    pyplot.locator_params(axis = 'x', nbins = 5); pyplot.locator_params(axis = 'y', nbins = 5); axORBITorig.set_title('Correction') 
     
-    axPOScorr.plot(position, flux - fluxCORRECTION, 'k.', ms=6, alpha=.4)
+    axORBITcorr.plot(orbitalPHASE, flux - fluxCORRECTION, 'k.', ms=6, alpha=.4); axORBITcorr.plot(orbitalPHASE + 1., flux - fluxCORRECTION, 'k.', ms=6, alpha=.4)
     pl.tick_params('both',length=10,width=2,which='major'); pl.tick_params('both',length=10,width=1,which='minor')
-    pyplot.locator_params(axis = 'x', nbins = 5); pyplot.locator_params(axis = 'y', nbins = 5); axPOScorr.set_title('Residuals correction'); axPOScorr.set_ylabel('CCD position [pixel]')
+    pyplot.locator_params(axis = 'x', nbins = 5); pyplot.locator_params(axis = 'y', nbins = 5); axORBITcorr.set_title('Residuals correction'); axORBITcorr.set_ylabel('Orbital phase')
     
     # Settings
     # --------
     axTIMEorig.set_xlim([np.min(time), np.max(time)]); axTIMEorig.set_ylim([np.min(flux)*1.2, np.max(flux)*1.2])
-    axPOSorig.set_xlim([np.min(position) + 0.1, np.max(position) + 0.1])
-    axTIMEcorr.set_xlabel('Time [d]'); axTIMEorig.set_ylabel('Flux [adu]'); axTIMEcorr.set_ylabel('Flux [adu]'); axPOScorr.set_xlabel('Position [pixel]')
+    axORBITorig.set_xlim([np.min(orbitalPHASE) - 0.1, np.max(orbitalPHASE) + 1.1])
+    axTIMEcorr.set_xlabel('Time [d]'); axTIMEorig.set_ylabel('Flux [adu]'); axTIMEcorr.set_ylabel('Flux [adu]'); axORBITcorr.set_xlabel('Orbital phase')
       
     return

@@ -10,7 +10,7 @@ Last update 21 March 2016
 #===============================================================================
 # 				Packages
 #===============================================================================
-# import CheckMatplotlib # LOCAL ROUTINE, remove
+import CheckMatplotlib # LOCAL ROUTINE, remove
 import pylab as pl
 import numpy as np
 
@@ -158,7 +158,7 @@ def PLOTdetrendTEMPfluxFULL(time, flux, temperature, TCK, **kwargs):
     # Settings
     # --------
     axTIMEorig.set_xlim([np.min(time), np.max(time)]); axTIMEorig.set_ylim([np.min(flux)*1.2, np.max(flux)*1.2])
-    axTEMPorig.set_xlim([np.min(temperature) + 0.1, np.max(temperature) + 0.1])
+    axTEMPorig.set_xlim([np.min(temperature) - 0.1, np.max(temperature) + 0.1])
     axTIMEcorr.set_xlabel('Time [d]'); axTIMEorig.set_ylabel('Flux [adu]'); axTIMEcorr.set_ylabel('Flux [adu]'); axTEMPcorr.set_xlabel('Temp [deg]')
       
     return
