@@ -10,7 +10,7 @@ Last update 30 March 2016
 #===============================================================================
 # 				Packages
 #===============================================================================
-import CheckMatplotlib # LOCAL ROUTINE, remove
+# import CheckMatplotlib # LOCAL ROUTINE, remove
 import pylab as pl
 import numpy as np
 
