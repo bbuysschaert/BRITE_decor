@@ -90,17 +90,20 @@ def detrendTEMPpsfCOORD(flux, coord, **kwargs): # actually redundant and should 
 	  coordKNOTPOINTS = np.arange(np.min(coord) + SPLINEknotpointsSPACING[kk] - pp*SPLINEphaseSHIFT, np.max(coord), SPLINEknotpointsSPACING[kk])
 	else: # No shift
 	  coordKNOTPOINTS = np.arange(np.min(coord) + SPLINEknotpointsSPACING[kk], np.max(coord), SPLINEknotpointsSPACING[kk])
+	  
 	# Check whether the last element is too far away or over the maximum value of that position. This happens roughly in ~0.1% of the calculations
 	if np.max(coord) - coordKNOTPOINTS[-1] > SPLINEknotpointsSPACING[kk]:
 	  coordKNOTPOINTS = np.append(coordKNOTPOINTS, coordKNOTPOINTS[-1] + SPLINEknotpointsSPACING[kk])
 	elif np.max(coord) - coordKNOTPOINTS[-1] <= 0:
 	  coordKNOTPOINTS = np.delete(coordKNOTPOINTS, -1)
+	  
 	for oo in range(len(SPLINEorder)): 		# Loop over the different orders of spline
-	  NUMBERestimatedPARAMScoord = (len(coordKNOTPOINTS) + 1) * (SPLINEorder[oo] + 1)		# Preferred usage #NOTE +1 here, since the knotpoints DO NOT include beginning and ending
+	  NUMBERestimatedPARAMScoord = (len(coordKNOTPOINTS) + 1) * (SPLINEorder[oo] + 1)			# Preferred usage #NOTE +1 here, since the knotpoints DO NOT include beginning and ending
 	  ###NUMBERestimatedPARAMScoord = np.int(1./SPLINEknotpointsSPACING[kk]) * (SPLINEorder[oo] + 1)	# Alternative, more prone to overfitting minor effects
 	  TCKcoord, TCKerror = splineFIT(coordSORTED, fluxSORTED, SPLINEgiveKNOTPOINTS = True, SPLINEknotpoints = coordKNOTPOINTS, SPLINEorder = SPLINEorder[oo])   
 	  AICcoord, BICcoord, likelihoodCOORD = splineGOODNESSofFITandINFORMATIONCRITERION(coord, flux, TCKcoord, PARAMSdetermine=False, PARAMSestimated=NUMBERestimatedPARAMScoord) # You should provide the full coord array, no rebinned arrays. We provide the number of estimated parameters.
 	  matrixAIClocal[kk,pp,oo], matrixBIClocal[kk,pp,oo], likelihoodMATRIXlocal[kk,pp,oo], matrixTCKlocal[kk,pp,oo] = AICcoord, BICcoord, likelihoodCOORD, str(TCKcoord)
+	  
     return matrixAIClocal, matrixBIClocal, likelihoodMATRIXlocal, matrixTCKlocal
 
 def detrendTEMPpsfFULL(time, flux, xPOS, yPOS, **kwargs):

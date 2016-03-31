@@ -55,16 +55,18 @@ def detrendPARAMflux(param, flux, **kwargs):
     @return matrixTCKlocal: matrix of the likelihood of each fit
     @rtype: numpy 3D array of size KxPXO containing the TCK tuple converted to a string
     
-    @kwargs: SPLINEknotpointsSPACING: set of spacing for the different knotpoints - Default is np.array([1./3., 0.5, 1.0]) [deg]
-    @kwargs: SPLINEphaseSHIFT: value to consider for the phase shift for the same sets of knotpoints - Default is 0.01 [deg]
+    @kwargs: SPLINEknotpointsSPACING: set of spacing for the different knotpoints - Default is np.array([1./3., 0.5, 1.0]) [param]
+    @kwargs: SPLINEphaseSHIFT: value to consider for the phase shift for the same sets of knotpoints - Default is 0.01 [param]
     @kwargs: SPLINEorder: order for the spline fits; does accept numpy arrays! - Default is np.array([3],dtype='int32')
     @kwargs: SPLINEtckLENGTH: number of bytes allocated for the to-string-converted TCK - Default is 2000 [integer]
+    @kwargs: SPLINEperiodic: perform a periodic spline fit (i.e. fit at last point == fit at first point) - Default is False [Boolean]
     """
     # Reading in the kwargs and performing some minor checks, so we have everything in the correct input format
-    SPLINEknotpointsSPACING = kwargs.get('SPLINEknotpointsSPACING', np.array([1./3., 0.5, 1.0])) #[deg]
-    SPLINEphaseSHIFT = kwargs.get('SPLINEphaseSHIFT', 0.01) #[deg]
+    SPLINEknotpointsSPACING = kwargs.get('SPLINEknotpointsSPACING', np.array([1./3., 0.5, 1.0])) #[param]
+    SPLINEphaseSHIFT = kwargs.get('SPLINEphaseSHIFT', 0.01) #[param]
     SPLINEorder = kwargs.get('SPLINEorder', np.array([3],dtype='int32')) #[integer]
     SPLINEtckLENGTH = 'S' + str(np.int(kwargs.get('SPLINEstringLENGTH', 2000))) # [string] 
+    periodicSPLINE = kwargs.get('SPLINEperiodic', False) #[Boolean]
     # Making sure you gave a numpy array for SPLINEorder with integers. If not, change it
     try:
       len(SPLINEorder)
@@ -99,7 +101,7 @@ def detrendPARAMflux(param, flux, **kwargs):
 	for oo in range(len(SPLINEorder)): 		# Loop over the different orders of spline
 	  NUMBERestimatedPARAMSparam = (len(paramKNOTPOINTS) + 1) * (SPLINEorder[oo] + 1)		# Preferred usage #NOTE +1 here, since the knotpoints DO NOT include beginning and ending
 	  ###NUMBERestimatedPARAMSparam = np.int(1./SPLINEknotpointsSPACING[kk]) * (SPLINEorder[oo] + 1)	# Alternative, more prone to overfitting minor effects
-	  TCKparam, TCKerror = splineFIT(paramSORTED, fluxSORTED, SPLINEgiveKNOTPOINTS = True, SPLINEknotpoints = paramKNOTPOINTS, SPLINEorder=SPLINEorder[oo])    
+	  TCKparam, TCKerror = splineFIT(paramSORTED, fluxSORTED, SPLINEgiveKNOTPOINTS = True, SPLINEknotpoints = paramKNOTPOINTS, SPLINEorder=SPLINEorder[oo], SPLINEperiodic=periodicSPLINE)    
 	  AICparam, BICparam, likelihoodPARAM = splineGOODNESSofFITandINFORMATIONCRITERION(param, flux, TCKparam, PARAMSdetermine=False, PARAMSestimated=NUMBERestimatedPARAMSparam) # You should provide the full coord array, no rebinned arrays. We provide the number of estimated parameters.
 	  matrixAIClocal[kk,pp,oo], matrixBIClocal[kk,pp,oo], likelihoodMATRIXlocal[kk,pp,oo], matrixTCKlocal[kk,pp,oo] = AICparam, BICparam, likelihoodPARAM, str(TCKparam)
     return matrixAIClocal, matrixBIClocal, likelihoodMATRIXlocal, matrixTCKlocal
