@@ -89,14 +89,18 @@ def detrendPARAMflux(param, flux, **kwargs):
       NUMBERphaseSHIFTS = np.int(SPLINEknotpointsSPACING[kk]/SPLINEphaseSHIFT)
       for pp in range(NUMBERphaseSHIFTS): 		# Loop over the different phaseshifts for a given set of knotpoints
 	if pp !=0: # A shift
-	  paramKNOTPOINTS = np.arange(np.min(param) + SPLINEknotpointsSPACING[kk] - pp*SPLINEphaseSHIFT, np.max(param), SPLINEknotpointsSPACING[kk])
-	else: # No shift shift
+	  #paramKNOTPOINTS = np.arange(np.min(param) + SPLINEknotpointsSPACING[kk] - pp*SPLINEphaseSHIFT, np.max(param), SPLINEknotpointsSPACING[kk]) # Old == BAD
+	  paramKNOTPOINTS = np.arange(np.min(param) + SPLINEknotpointsSPACING[kk], np.max(param), SPLINEknotpointsSPACING[kk]) + pp*SPLINEphaseSHIFT # New
+	else: # No shift
 	  paramKNOTPOINTS = np.arange(np.min(param) + SPLINEknotpointsSPACING[kk], np.max(param), SPLINEknotpointsSPACING[kk])
-	# Check whether the last element is too far away or over the maximum value of that position. This happens roughly in ~0.1% of the calculations
+	# Check whether the last element is too far away or over the maximum value of that position. This happens roughly in ~50% of the calculations
 	if np.max(param) - paramKNOTPOINTS[-1] > SPLINEknotpointsSPACING[kk]:
 	  paramKNOTPOINTS = np.append(paramKNOTPOINTS, paramKNOTPOINTS[-1] + SPLINEknotpointsSPACING[kk])
 	elif np.max(param) - paramKNOTPOINTS[-1] <= 0:
 	  paramKNOTPOINTS = np.delete(paramKNOTPOINTS, -1)
+	#  Check whether the first element is too far away from the minimum. This happens roughly in ~50% of the calculations
+	if abs(np.min(param) - paramKNOTPOINTS[0]) > SPLINEknotpointsSPACING[kk] + SPLINEphaseSHIFT:
+	  paramKNOTPOINTS = np.append(paramKNOTPOINTS[0] - SPLINEknotpointsSPACING[kk], paramKNOTPOINTS)
 	
 	for oo in range(len(SPLINEorder)): 		# Loop over the different orders of spline
 	  NUMBERestimatedPARAMSparam = (len(paramKNOTPOINTS) + 1) * (SPLINEorder[oo] + 1)		# Preferred usage #NOTE +1 here, since the knotpoints DO NOT include beginning and ending

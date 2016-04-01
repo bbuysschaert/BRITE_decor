@@ -86,16 +86,28 @@ def detrendTEMPpsfCOORD(flux, coord, **kwargs): # actually redundant and should 
     for kk in range(len(SPLINEknotpointsSPACING)):	# Loop over the different sets of knotpoints
       NUMBERphaseSHIFTS = np.int(SPLINEknotpointsSPACING[kk]/SPLINEphaseSHIFT)
       for pp in range(NUMBERphaseSHIFTS): 		# Loop over the different phaseshifts for a given set of knotpoints
-	if pp != 0: # A shift
-	  coordKNOTPOINTS = np.arange(np.min(coord) + SPLINEknotpointsSPACING[kk] - pp*SPLINEphaseSHIFT, np.max(coord), SPLINEknotpointsSPACING[kk])
+	#if pp != 0: # A shift
+	  #coordKNOTPOINTS = np.arange(np.min(coord) + SPLINEknotpointsSPACING[kk] - pp*SPLINEphaseSHIFT, np.max(coord), SPLINEknotpointsSPACING[kk])
+	#else: # No shift
+	  #coordKNOTPOINTS = np.arange(np.min(coord) + SPLINEknotpointsSPACING[kk], np.max(coord), SPLINEknotpointsSPACING[kk])
+	  
+	## Check whether the last element is too far away or over the maximum value of that position. This happens roughly in ~0.1% of the calculations
+	#if np.max(coord) - coordKNOTPOINTS[-1] > SPLINEknotpointsSPACING[kk]:
+	  #coordKNOTPOINTS = np.append(coordKNOTPOINTS, coordKNOTPOINTS[-1] + SPLINEknotpointsSPACING[kk])
+	#elif np.max(coord) - coordKNOTPOINTS[-1] <= 0:
+	  #coordKNOTPOINTS = np.delete(coordKNOTPOINTS, -1)
+	if pp !=0: # A shift
+	  coordKNOTPOINTS = np.arange(np.min(coord) + SPLINEknotpointsSPACING[kk], np.max(coord), SPLINEknotpointsSPACING[kk]) + pp*SPLINEphaseSHIFT # New
 	else: # No shift
 	  coordKNOTPOINTS = np.arange(np.min(coord) + SPLINEknotpointsSPACING[kk], np.max(coord), SPLINEknotpointsSPACING[kk])
-	  
-	# Check whether the last element is too far away or over the maximum value of that position. This happens roughly in ~0.1% of the calculations
+	# Check whether the last element is too far away or over the maximum value of that position. This happens roughly in ~50% of the calculations
 	if np.max(coord) - coordKNOTPOINTS[-1] > SPLINEknotpointsSPACING[kk]:
 	  coordKNOTPOINTS = np.append(coordKNOTPOINTS, coordKNOTPOINTS[-1] + SPLINEknotpointsSPACING[kk])
 	elif np.max(coord) - coordKNOTPOINTS[-1] <= 0:
 	  coordKNOTPOINTS = np.delete(coordKNOTPOINTS, -1)
+	#  Check whether the first element is too far away from the minimum. This happens roughly in ~50% of the calculations
+	if abs(np.min(coord) - coordKNOTPOINTS[0]) > SPLINEknotpointsSPACING[kk] + SPLINEphaseSHIFT:
+	  coordKNOTPOINTS = np.append(coordKNOTPOINTS[0] - SPLINEknotpointsSPACING[kk], coordKNOTPOINTS)
 	  
 	for oo in range(len(SPLINEorder)): 		# Loop over the different orders of spline
 	  NUMBERestimatedPARAMScoord = (len(coordKNOTPOINTS) + 1) * (SPLINEorder[oo] + 1)			# Preferred usage #NOTE +1 here, since the knotpoints DO NOT include beginning and ending
