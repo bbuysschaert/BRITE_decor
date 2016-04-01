@@ -41,6 +41,9 @@ def reconvertTCKfromSTRING(TCKstring, **kwargs):
     -Once the first numpy array is retrieved, we should find a '], array(['
     -There are '\n' saved in the string. --> Need to be removed
     
+    
+    NOTE: Any bug here, means that your predefined length for the string was too short (standard 2000 characters)
+    
     Returns: The TCK, but as a tuple.
     
     @param TCKstring: string of the tck
@@ -115,10 +118,11 @@ def splineFIT(param1, param2, **kwargs):
     else:
       knotpointSPLINE = kwargs.pop('SPLINEknotpoints')
     
+    # WARNING your first element and last element of the knotpointSPLINE should be larger than the minimum and smaller than the maximum of param2, respectively. If not, splrep WILL complain.
     if not(periodicSPLINE):
-      tckSPLINE, fpSPLINE, ierSPLINE, msgSPLINE  = scInterp.splrep(param1, param2, t=knotpointSPLINE[1:], k=orderSPLINE, full_output=1)
+      tckSPLINE, fpSPLINE, ierSPLINE, msgSPLINE  = scInterp.splrep(param1, param2, t=knotpointSPLINE[:], k=orderSPLINE, full_output=1)
     elif periodicSPLINE:
-      tckSPLINE, fpSPLINE, ierSPLINE, msgSPLINE = scInterp.splrep(param1, param2, t=knotpointSPLINE[1:], k=orderSPLINE, per=1, full_output=1)    
+      tckSPLINE, fpSPLINE, ierSPLINE, msgSPLINE = scInterp.splrep(param1, param2, t=knotpointSPLINE[:], k=orderSPLINE, per=1, full_output=1)    
     
     if (ierSPLINE != 0) and not(doSILENT):
       print 'The spline fitting routine produced an error, which is the following:'
