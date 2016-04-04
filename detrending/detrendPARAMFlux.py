@@ -96,7 +96,7 @@ def detrendPARAMflux(param, flux, **kwargs):
 	# Check whether the last element is too far away or over the maximum value of that position. This happens roughly in ~50% of the calculations
 	if np.max(param) - paramKNOTPOINTS[-1] > SPLINEknotpointsSPACING[kk]:
 	  paramKNOTPOINTS = np.append(paramKNOTPOINTS, paramKNOTPOINTS[-1] + SPLINEknotpointsSPACING[kk])
-	elif np.max(param) - paramKNOTPOINTS[-1] <= 0:
+	elif (np.max(param) - paramKNOTPOINTS[-1] <= 0) and (len(paramKNOTPOINTS) != 1):
 	  paramKNOTPOINTS = np.delete(paramKNOTPOINTS, -1)
 	#  Check whether the first element is too far away from the minimum. This happens roughly in ~50% of the calculations
 	if abs(np.min(param) - paramKNOTPOINTS[0]) > SPLINEknotpointsSPACING[kk] + SPLINEphaseSHIFT:
