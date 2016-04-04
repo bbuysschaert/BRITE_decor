@@ -138,7 +138,7 @@ def saveDETREND(fileOUT, pathOUT, time, fluxRAW, xPOS, yPOS, temperature, exposu
     # Constructing the matrix
     dtOUT = np.dtype([('time', np.float), ('flux', np.float), ('xPOS', np.float), ('yPOS', np.float), ('temperature', np.float), ('exposureTIME', np.float), ('numberSTACKS', np.float), ('correction', np.float)])
     matrixOUT = np.zeros(len(time), dtype=dtOUT)
-    matrixOUT['time'] = time; matrixOUT['flux'] = flux; matrixOUT['xPOS'] = xPOS; matrixOUT['yPOS'] = yPOS; matrixOUT['temperature'] = temperature; matrixOUT['exposureTIME'] = exposureTIME; matrixOUT['numberSTACKS'] = numberSTACKS; matrixOUT['correction'] = correction
+    matrixOUT['time'] = time; matrixOUT['flux'] = fluxRAW; matrixOUT['xPOS'] = xPOS; matrixOUT['yPOS'] = yPOS; matrixOUT['temperature'] = temperature; matrixOUT['exposureTIME'] = exposureTIME; matrixOUT['numberSTACKS'] = numberSTACKS; matrixOUT['correction'] = correction
     
     # The actual saving using a numpy.savetxt    
     np.savetxt(pathOUT + fileOUT, matrixOUT, fmt=('%.12e %.7f %.4f %.4f %.4f %.2f %i %.7f'), delimiter=' ', header=headerSTRING, comments='#')    
