@@ -1,8 +1,9 @@
+s
 # BRITE_decor
 
 Dear all,
 
-This is a bundled version of different Python routines, which may prove to be useful for the detrending of BRITE photometry and its analysis. We are currently overhauling the repository using 'svn'. Please stay tuned for further news.
+This is a bundled version of different Python routines, which may prove to be useful for the detrending of BRITE photometry and its analysis. We are currently overhauling the repository using 'svn'. Please stay tuned for further news...
 
 # Requirements
 'Standard' Python packages are expected to be installed.  I include the installed version I have on my local computer.  Let me know if a previous version will not work / run.
