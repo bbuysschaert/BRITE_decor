@@ -1,1 +1,1 @@
-developers should develop here
+Since everything is still under development, all routines are currenly stored here.  Whenever we have some time, we will mark and push given routines to the stable directory.
