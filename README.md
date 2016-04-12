@@ -14,16 +14,17 @@ Most of the routines were tested under Python 2.7 (Enthought) on a Linux machine
 # Installation
 At present, we recommend you to download the routines from the 'devel' repository, using svn. After setting up the proper Python path, everything should run smoothly (unless we made a mistake). Below, we show you how to download the package through svn.
 
->> cd /your/favorite/path/location (-- we recommend /python)
+> cd /your/favorite/path/location (-- we recommend /python)
 
->> svn checkout https://github.com/bbuysschaert/BRITE_decor.git/trunk/devel/BRITE_decor
+> svn checkout https://github.com/bbuysschaert/BRITE_decor.git/trunk/devel/BRITE_decor
 
 Next, you set up your Python path (in your .bashrc or .bash_profile).
 
 $ export PYTHONPATH=/your/favorite/path/location/:$PYTHONPATH
 
 NOTES:
-- You do not include the "BRITE_decor" in the Python path.
+- You do not include the "~/BRITE_decor" in the Python path.
+- Do not forget to resource your .bashrc file ('close the current terminal and / or source .bashprofile').
 - Try not to rename the "BRITE_decor", since the routines are explicitly looking for it.
 
 
@@ -39,6 +40,6 @@ svn checkout https://github.com/bbuysschaert/BRITE_decor.git/trunk/examples/
 Q: I want to use these routines in my own coding.  How do I properly import them?
 A: Currently you can use 
 
->> import BRITE_decor.directory.package as xxxxx (example: import BRITE_decor.inout.load as loadBRITE)
+> import BRITE_decor.directory.package as xxxxx (example: import BRITE_decor.inout.load as loadBRITE) 
 
 We are trying the make it as such so you can do an 'import BRITE_decor.directory', and have all the respective routines from the packages.  However, we are still editing the proper directory structure.
