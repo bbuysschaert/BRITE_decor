@@ -102,7 +102,7 @@ if __name__ == '__main__':
     
     
     
-    figCORRECTION = pl.figure(figsize=(16,16))
+    figCORRECTION = pl.figure(figsize=(20,16))
     axTEMPcorr = figCORRECTION.add_subplot(311)
     axxCCDcorr = figCORRECTION.add_subplot(312, sharex=axTEMPcorr, sharey=axTEMPcorr)
     axyCCDcorr = figCORRECTION.add_subplot(313, sharex=axTEMPcorr, sharey=axTEMPcorr)
@@ -112,11 +112,9 @@ if __name__ == '__main__':
     axyCCDcorr.plot(HJD, yCCDcorrection, 'k.', ms=6, alpha=.4)
     
     
-    figCORRECTION2 = pl.figure(figsize=(16,16))
-    axRAW = figCORRECTION2.add_subplot(221)
-    axFINAL = figCORRECTION2.add_subplot(223, sharex=axRAW, sharey=axRAW)
-    axRAWfreq = figCORRECTION2.add_subplot(222)
-    axFINALfreq = figCORRECTION2.add_subplot(224, sharex=axRAWfreq, sharey=axRAWfreq)
+    figCORRECTION2 = pl.figure(figsize=(20,16))
+    axRAW = figCORRECTION2.add_subplot(211)
+    axFINAL = figCORRECTION2.add_subplot(212, sharex=axRAW, sharey=axRAW)
     
     axRAW.plot(HJD, fluxRAW, 'k.', ms=6, alpha=.4)
     axFINAL.plot(HJD, fluxCORRECTED, 'k.', ms=6, alpha=.4)
