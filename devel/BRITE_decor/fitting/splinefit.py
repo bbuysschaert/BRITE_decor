@@ -135,10 +135,10 @@ def splineFIT(param1, param2, **kwargs):
 def splineGOODNESSofFITandINFORMATIONCRITERION(param1, param2, tck, **kwargs): #Used  (09/03/16)
     """
     For a given spline fit which captures the behaviour of param2 with varying param1 do:
-    - determine the goodness of fit using the residuals, a likelihood function
+    - determine the goodness of fit using the residuals, a loglikelihood function
     - determine the information criterion for the fit (both Akaike and Bayesian information criterion) using the likelihood
     
-    The used likelihood is slightly adapted for negative values (using the abs() function) from Duvall & Harvey 1986, Anderson+ 1990 and seen as Eq. (9) in Buysschaert, Beck, et al. 2016.
+    The used loglikelihood is slightly adapted for negative values (using the abs() function) from Duvall & Harvey 1986, Anderson+ 1990 and seen as Eq. (9) in Buysschaert, Beck, et al. 2016.
     
     WARNING We calculate the number of estimated parameters within a spline as followed:
     (number of fitting regions) * (order of spline + 1)
@@ -155,7 +155,7 @@ def splineGOODNESSofFITandINFORMATIONCRITERION(param1, param2, tck, **kwargs): #
     The np.log is the natural logarithm.
     
     
-    Returns: The AIC, BIC, and the likelihood of the model characterised by tck
+    Returns: The AIC, BIC, and the loglikelihood of the model characterised by tck
     
     @param param1: parameter 1 values 
     @type param1: numpy array of length N
@@ -168,7 +168,7 @@ def splineGOODNESSofFITandINFORMATIONCRITERION(param1, param2, tck, **kwargs): #
     @rtype: numpy.float
     @return: BIC: Bayesian information criterion
     @rtype: numpy.float
-    @return: likelihood: likelihood of the fit
+    @return: loglikelihood: loglikelihood of the fit
     @rtype: numpy.float
     
     @kwargs: fullOUTPUT: print all determined diagnostic values for the goodness of fit - Default is False [Boolean]
@@ -180,7 +180,8 @@ def splineGOODNESSofFITandINFORMATIONCRITERION(param1, param2, tck, **kwargs): #
     residuals = param2 - scInterp.splev(param1, tck)
     RSS = np.sum(residuals**2.)
     residualsSTD = np.std(residuals)
-    likelihood = np.sum(np.log(np.abs(scInterp.splev(param1, tck))) + np.abs(param2 / scInterp.splev(param1, tck))) #NOTE absolute values of the fit, since param2 (and its representation) can be lower than 0, which is *not* ideal for a logarithm.
+    # This is actually a log-likelihood.  So, normally, you should not take any log's of this when calculating the AIC/BIC
+    loglikelihood = np.sum(np.log(np.abs(scInterp.splev(param1, tck))) + np.abs(param2 / scInterp.splev(param1, tck))) #NOTE absolute values of the fit, since param2 (and its representation) can be lower than 0, which is *not* ideal for a logarithm.
     
     
     if kwargs.get('PARAMSdetermine', True):
@@ -188,13 +189,18 @@ def splineGOODNESSofFITandINFORMATIONCRITERION(param1, param2, tck, **kwargs): #
     else:
       estimatedPARAMS = kwargs.pop('PARAMSestimated')
     
-    AIC = estimatedPARAMS * np.log(len(param1)) + len(param1) * np.log(likelihood)
-    BIC = 2. * estimatedPARAMS + len(param1) * np.log(likelihood)
+    # OLD and possibly wrong implementation
+    ##AIC = estimatedPARAMS * np.log(len(param1)) + len(param1) * np.log(likelihood)
+    ##BIC = 2. * estimatedPARAMS + len(param1) * np.log(likelihood)
+    
+    # NEW one
+    AIC = 2 * estimatedPARAMS - 2. * loglikelihood
+    BIC = -2. * loglikelihood + estimatedPARAMS * np.log(len(param1))
     
     if kwargs.get('fullOUTPUT', False):
-      print '\tRSS\t= {:.5e}\n\tBIC\t= {:.5e}\n\tAIC\t= {:.5e}\n\tstd\t= {:.5e}\n\tlikelihood\t= {:.5e}\n'.format(RSS, BIC, AIC, residualsSTD, likelihood)
+      print '\tRSS\t= {:.5e}\n\tBIC\t= {:.5e}\n\tAIC\t= {:.5e}\n\tstd\t= {:.5e}\n\tlikelihood\t= {:.5e}\n'.format(RSS, BIC, AIC, residualsSTD, loglikelihood)
     
     if ((np.isnan(AIC)) or (np.isnan(BIC))) and not(doSILENT):
-      print bcolors.WARNING + '\tWARNING WARNING\n\tYou have NaN values for either AIC or BIC. Printing out all diagnostic values below...\n\tRSS\t= {:.5e}\n\tBIC\t= {:.5e}\n\tAIC\t= {:.5e}\n\tstd\t= {:.5e}\n\tlikelihood\t= {:.5e}\n'.format(RSS, BIC, AIC, residualsSTD, likelihood) + bcolors.ENDC
+      print bcolors.WARNING + '\tWARNING WARNING\n\tYou have NaN values for either AIC or BIC. Printing out all diagnostic values below...\n\tRSS\t= {:.5e}\n\tBIC\t= {:.5e}\n\tAIC\t= {:.5e}\n\tstd\t= {:.5e}\n\tlikelihood\t= {:.5e}\n'.format(RSS, BIC, AIC, residualsSTD, loglikelihood) + bcolors.ENDC
       
-    return AIC, BIC, likelihood
+    return AIC, BIC, loglikelihood
