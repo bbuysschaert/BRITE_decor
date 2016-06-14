@@ -26,7 +26,9 @@ NOTES:
 - You do not include the "~/BRITE_decor" in the Python path.
 - Do not forget to resource your .bashrc file ('close the current terminal and / or source .bashprofile').
 - Try not to rename the "BRITE_decor", since the routines are explicitly looking for it.
-- You can keep your package up-to-date by using 'svn update' while being in your repository.
+
+UPDATING:
+You can keep your package up-to-date by using 'svn update' while being in your BRITE_decor repository.
 
 # Examples
 At present, we have included very minimal example_routines (with some data).  These show some examples of the outlier clipping (step-by-step, some interactive), the PSFdetrending (showing what it can do, most difficult part will be to set up your proper temperaturebins), 'standard' detrending.
