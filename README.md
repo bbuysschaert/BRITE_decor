@@ -49,7 +49,9 @@ Q: I want to use these routines in my own coding.  How do I properly import them
 
 A: Currently you can use 
 
-> import BRITE_decor.directory.package as xxxxx (example: import BRITE_decor.inout.load as loadBRITE) 
+> import BRITE_decor.directory.package as xxxxx 
+
+> (example: import BRITE_decor.inout.load as loadBRITE) 
 
 We are trying the make it as such so you can do an 'import BRITE_decor.directory', and have all the respective routines from the packages.  However, we are still editing the proper directory structure.
 
@@ -60,6 +62,7 @@ Q: How do I know what a given routine does?
 A: Almost all routines have a dedicated help function implemented with them.  You can, thus, always do the following in your ipython or python terminal:
 
 > import BRITE_decor.directory.package as BRITEpackage
+
 > help(BRITEpackage.function)
 
 This will give you an idea on what each parameter does, the datatype is expects, and what the possible kwargs are. (kwargs are non-keyword arguments.  These are used to hide default options, which you could change when running the scripts, for a better fit, visualisation, etc.)
