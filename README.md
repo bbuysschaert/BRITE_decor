@@ -26,6 +26,7 @@ NOTES:
 - You do not include the "~/BRITE_decor" in the Python path.
 - Do not forget to resource your .bashrc file ('close the current terminal and / or source .bashprofile').
 - Try not to rename the "BRITE_decor", since the routines are explicitly looking for it.
+- Do not forget to change the PYTHONPATH, since it is crucial, if you want to have access from all directories to these routines.
 
 UPDATING:
 You can keep your package up-to-date by using 'svn update' while being in your BRITE_decor repository.
@@ -37,11 +38,28 @@ You can download this example directory (after installing BRITE_decor) as follow
 
 svn checkout https://github.com/bbuysschaert/BRITE_decor.git/trunk/examples/
 
+In general, you would run the examples in the following manner:
+1. "read_clip_save_example.py": This routine reads in a BRITE 'setup file' of one star, which contains the extracted flux, including some meta-data.  During the first step of this script, we correct the timing, to calculate the mid-exposure time of the observation.  This is slightly more tricky, when on-board stacking has happened.  Next, we do an outlier rejection using both the flux measurements and the meta-data (i.e. temperature, centroid position, ...).
+2. "read_PSFcorrection_save_example.py": This routine starts from the outlier rejected photometry, from the previous example.  Here, we correct for the varying PSF shape, with respect to time, caused by the changing on-board temperature.  Since the temperature is higly variable with time, we need to deconstruct the 'setup file' into smaller 'bins', which have an approximately similar PSF behaviour.  Within each bin, we then do a decorrelation between flux and both centroid positions.  The main effect of these corrections is a (significant) drop in scatter on the flux.
+3. "read_detrend_save_example.py": This is the last routine you would call during the detrending of the data.  Here, it does an additional decorrelation with the meta-data for possible instrumental effects.  We force the routine to decorrelate with all possible meta-data, but you should, in general, be more careful, and only decorrelate for strong correlations!
+
 # FAQs
 
 Q: I want to use these routines in my own coding.  How do I properly import them?
+
 A: Currently you can use 
 
 > import BRITE_decor.directory.package as xxxxx (example: import BRITE_decor.inout.load as loadBRITE) 
 
 We are trying the make it as such so you can do an 'import BRITE_decor.directory', and have all the respective routines from the packages.  However, we are still editing the proper directory structure.
+
+-----------
+
+Q: How do I know what a given routine does?
+
+A: Almost all routines have a dedicated help function implemented with them.  You can, thus, always do the following in your ipython or python terminal:
+
+> import BRITE_decor.directory.package as BRITEpackage
+> help(BRITEpackage.function)
+
+This will give you an idea on what each parameter does, the datatype is expects, and what the possible kwargs are. (kwargs are non-keyword arguments.  These are used to hide default options, which you could change when running the scripts, for a better fit, visualisation, etc.)
