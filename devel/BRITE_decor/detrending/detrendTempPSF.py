@@ -392,4 +392,9 @@ def detrendTEMPpsfFULL(time, flux, xPOS, yPOS, **kwargs):
     
     # Combining both diagnostic values to one integer. NOTE: At the moment of writing (15/03/16), each diagCORRECTIONxxx corresponds to three digits, hence we multiple diagCORRECTIONfirst with 1000.
     diagCORRECTION = diagCORRECTIONfirst * 1000 + diagCORRECTIONsecond
+    
+    print 'Minor debugging diagnostics provided for your convenience'
+    print '1 - knotpoint spacing = {:1.2f}; phaseshift spacing = {:1.2f}'.format(SPLINEknotpointsSPACING[AICmin[1][0]], AICmin[2][0]*SPLINEphaseSHIFT)
+    print '2 - knotpoint spacing = {:1.2f}; phaseshift spacing = {:1.2f}'.format(SPLINEknotpointsSPACING[AICmin2[0][0]], AICmin2[1][0]*SPLINEphaseSHIFT)
+    
     return FLUXfirstCORRECTION + FLUXsecondCORRECTION, matrixTCKfirst[FIRSTcorrectionPARAMS][0], matrixTCKsecond[SECONDcorrectionPARAMS][0], diagCORRECTION    
