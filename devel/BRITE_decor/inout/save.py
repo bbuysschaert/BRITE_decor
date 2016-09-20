@@ -85,7 +85,7 @@ def saveCLIPPED(fileOUT, pathOUT, time, flux, xPOS, yPOS, temperature, exposureT
     # The actual saving using a numpy.savetxt    
     np.savetxt(pathOUT + fileOUT, matrixOUT, fmt=('%.12e %.7f %.4f %.4f %.4f %.2f %i'), delimiter=' ', header=headerSTRING, comments='#')
     
-def saveCLIPPED_DR4(fileOUT, pathOUT, time, flux, xPOS, yPOS, temperature, exposureTIME, numberSTACKS, **kwargs):
+def saveCLIPPED_DR4(fileOUT, pathOUT, time, flux, xPOS, yPOS, temperature, exposureTIME, numberSTACKS, PSFC1, PSFC2, RTSC,  **kwargs):
     """
     Routine to save the output of the clipping process for DR4 data.
     
