@@ -84,6 +84,71 @@ def saveCLIPPED(fileOUT, pathOUT, time, flux, xPOS, yPOS, temperature, exposureT
     
     # The actual saving using a numpy.savetxt    
     np.savetxt(pathOUT + fileOUT, matrixOUT, fmt=('%.12e %.7f %.4f %.4f %.4f %.2f %i'), delimiter=' ', header=headerSTRING, comments='#')
+    
+def saveCLIPPED_DR4(fileOUT, pathOUT, time, flux, xPOS, yPOS, temperature, exposureTIME, numberSTACKS, **kwargs):
+    """
+    Routine to save the output of the clipping process for DR4 data.
+    
+    Returns: Nothing, but saves a file named fileOUT at the specified location pathOUT.
+    
+    @param fileOUT: name you wish to give to the output file (.txt NO need to be specified)
+    @type fileOUT: string
+    @param pathOUT: path to the location where you wish to save the output
+    @type pathOUT: string
+    
+    @param time: heliocentric JD of the observations [d]
+    @type time: numpy array of length N
+    @param flux: flux measurements [adu]
+    @type flux: numpy array of length N
+    @param xPOS: CCD position measurements along the x position axis [pixel]
+    @type xPOS: numpy array of length N
+    @param yPOS: CCD position measurements along the x position axis [pixel]
+    @type yPOS: numpy array of length N
+    @param temperature: temperature measurements [deg]
+    @type temperature: numpy array of length N
+    
+    DR4: 
+    @param PSFC1: PSF blurring coeffient 1
+    @type PSFC2: numpy array of length N
+    @param PSFC2: PSF blurring coeffient 2
+    @type PSFC2: numpy array of length N
+    @param RTSC: RTS estimate coeffient
+    @type RTSC: numpy array of length N
+    
+    @param exposureTIME: exposure time for the observations [s]
+    @type exposureTIME: numpy array of length N
+    @param numberSTACKS: number of onboard stacked datapoints corresponding to this datapoint []
+    @type numberSTACKS: numpy array of length N
+    """
+    # Checking if the last character of pathOUT is an '/'
+    if not(pathOUT[-1] == '/'):
+      pathOUT += '/'
+    # Checking if the suffix of the file is given
+    if not fileOUT[-4:] in ['.txt', '.dat']:
+      fileOUT += '.dat'  
+      
+    # Preparing the header of the output file
+    headerSTRING = 'BRITE photometry, which was clipped for outliers on ' + strftime("%Y-%m-%d %H:%M:%s") + '.'
+    headerSTRING +='\n----------------------------------------'
+    headerSTRING +='\nColumn1: time measurements [d]'
+    headerSTRING +='\nColumn2: flux [adu]'
+    headerSTRING +='\nColumn3: CCD centroid x-position [pixel]'
+    headerSTRING +='\nColumn4: CCD centroid y-position [pixel]'
+    headerSTRING +='\nColumn5: CCD temperature [deg]'
+    headerSTRING +='\nColumn6: exposure time of the observations [s]'
+    headerSTRING +='\nColumn7: number of stacked observations corresponding to one datapoint []'
+    headerSTRING +='\nColumn8: PSF blurring coeffient 1 []'
+    headerSTRING +='\nColumn9: PSF blurring coeffient 2 []'
+    headerSTRING +='\nColumn10: RTS estimate coeffient []'
+    headerSTRING +='\n----------------------------------------'
+    
+    # Constructing the matrix
+    dtOUT = np.dtype([('time', np.float), ('flux', np.float), ('xPOS', np.float), ('yPOS', np.float), ('temperature', np.float), ('exposureTIME', np.float), ('numberSTACKS', np.float), ('PSFC1', np.float), ('PSFC2', np.float), ('RTSC', np.float)])
+    matrixOUT = np.zeros(len(time), dtype=dtOUT)
+    matrixOUT['time'] = time; matrixOUT['flux'] = flux; matrixOUT['xPOS'] = xPOS; matrixOUT['yPOS'] = yPOS; matrixOUT['temperature'] = temperature; matrixOUT['exposureTIME'] = exposureTIME; matrixOUT['numberSTACKS'] = numberSTACKS; matrixOUT['PSFC1'] = PSFC1; matrixOUT['PSFC2'] = PSFC2; matrixOUT['RTSC'] = RTSC
+    
+    # The actual saving using a numpy.savetxt    
+    np.savetxt(pathOUT + fileOUT, matrixOUT, fmt=('%.12e %.7f %.4f %.4f %.4f %.2f %i %.6f %.6f %.2f'), delimiter=' ', header=headerSTRING, comments='#')    
 
 def saveDETREND(fileOUT, pathOUT, time, fluxRAW, xPOS, yPOS, temperature, exposureTIME, numberSTACKS, correction, **kwargs):
     """
