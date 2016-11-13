@@ -53,11 +53,11 @@ def percentageFILTER(param, percentageLOW, percentageUP, **kwargs):
     """
     
     # Determine the values of the upper and lower percentiles.
-    lowerLIMIT, upperLIMIT = np.percentile(param2 - param2RELATION, [percentageLOW, 100-percentageUP])
+    lowerLIMIT, upperLIMIT = np.percentile(param, [percentageLOW, 100-percentageUP])
     
     # numpy.where doesn't like nested statements. So, do it in two steps...
-    IDXoutliers = np.where(param2 >= upperLIMIT)[0]
-    IDXoutliers = np.append(IDXoutliers, np.where(param2 <= lowerLIMIT)[0])
+    IDXoutliers = np.where(param >= upperLIMIT)[0]
+    IDXoutliers = np.append(IDXoutliers, np.where(param <= lowerLIMIT)[0])
     
     return sorted(IDXoutliers)
 
