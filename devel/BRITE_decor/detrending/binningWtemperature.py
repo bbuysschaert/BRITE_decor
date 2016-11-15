@@ -2,7 +2,7 @@
 """
 Routines which allow you to perform binning of the BRITE timeseries, using the longterm temperature variations. In addition, it is possibile to include the gapsize between datapoints for binning.
     
-Last update 16 March 2016
+Last update 15 November 2016
 
 @author: Bram Buysschaert
 """
