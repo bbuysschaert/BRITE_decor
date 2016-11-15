@@ -189,7 +189,7 @@ def openTIMEwithTEMPERATURE(time, temperature, **kwargs):
     # The long term temperature variations are calculated using a smoothing function. Since the time sampling between the different datapoints is not constant, you cannot use a convolution method. Therefore, a lowess (local linear regression fitting) filter is used, where the fraction of data considered is rather low (see lowessFRAC). If your setup is rather long, you might have to wait up to a few minutes for this step.
     
     print '\tPerforming lowess filtering ...'
-    lowessLONG = sm.nonparametric.lowess(temperature, time, frac=lowessFRAC)
+    lowessLONG = sm.nonparametric.lowess(temperature, time, frac=lowessFRAC, delta=0.1)
     timeLONG, temperatureLONG = lowessLONG[:,0], lowessLONG[:,1]
     print bcolors.OKBLUE + '\t... all done.' + bcolors.ENDC
     if len(timeLONG) != len(time):
