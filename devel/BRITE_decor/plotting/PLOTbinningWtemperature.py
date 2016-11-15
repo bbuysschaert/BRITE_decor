@@ -2,7 +2,7 @@
 """
 Routines to visualise the binning of the timeseries for the temperature dependent PSF changes, which produce instrumental effects between flux and position.
     
-Last update 21 March 2016
+Last update 15 November 2016
 
 @author: Bram Buysschaert
 """
@@ -90,7 +90,7 @@ def PLOTopenTIMEwithTEMPERATURE(time, flux, temperature, temperatureLONG, xPOS, 
       axTEMP.plot(time, temperatureLONG, 'r-', lw=3, alpha=.6)
     except:
       lowessFRAC = kwargs.get('LOWESSfrac', 0.2) # []
-      lowessLONG = sm.nonparametric.lowess(temperature, time, frac=lowessFRAC)
+      lowessLONG = sm.nonparametric.lowess(temperature, time, frac=lowessFRAC, delta=0.1)
       timeLONG = lowessLONG[:,0]
       axTEMP.plot(timeLONG, temperatureLONG, 'r-', lw=3, alpha=.6)      
     pl.tick_params('both',length=10,width=2,which='major'); pl.tick_params('both',length=10,width=1,which='minor')
